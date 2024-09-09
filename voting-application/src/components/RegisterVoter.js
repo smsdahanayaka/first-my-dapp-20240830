@@ -1,29 +1,26 @@
-import React, { useState } from "react";
+import React,{useState} from "react";
 
-function RegisterVoter() {
-const [address,setAddress]=useState('');
-const [viewAdd,viewAddress]=useState('');
+function RegisterVoter(){
+    const [input_val,setInputVal]=useState("");
+    const [view_val,getInputVal]=useState("");
 
-    const getAddressInput=(e)=>{
-        // seAddress(e.target.values);
-        setAddress(e.target.value); 
+    const registerVoter =()=>{
+        getInputVal(input_val);
+    }
+    const changeText =(e)=>{
+        setInputVal(e.target.value);
     }
 
-    const btnClick =()=>{
-        viewAddress(address);
-    }
-
-  return (
-    <div>
-      <h1>Register Voter</h1>
-      <label>Vater address : {viewAdd}</label>
-      {/* <form> */}
-        <input type="text" name="firstName" required placeholder="Voter Address" onChange={getAddressInput}/>
-        <br />
-        <button className="btn btn-primary" onClick={btnClick}>Submit</button>
-      {/* </form> */}
-    </div>
-  );
+    return (
+        <div>
+            <h1>Register Voter</h1>
+            {/* <form onSubmit={registerVoter}> */}
+                <label>{view_val}</label>
+                <input type="text" onChange={changeText} placeholder="enter your address" required />
+                <button onClick={registerVoter} type="submit" className="btn btn-primary">REGISTER</button>
+            {/* </form> */}
+        </div>
+    );
 }
 
 export default RegisterVoter;
