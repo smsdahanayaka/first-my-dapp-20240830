@@ -68,8 +68,8 @@ module.exports = {
       confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true,
-      gas: 500000,           // Gas limit
-      gasPrice: 2000000000,  // Gas price in wei
+      gas: 1000000,           // Gas limit
+      gasPrice: 10000000000,  // Gas price in wei
     },
     // Other networks...
   },
