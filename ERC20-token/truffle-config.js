@@ -46,6 +46,9 @@ const { MNEMONIC, ALCHEMY_API_KEY } = process.env;
 
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
+const privateKey = process.env.PRIVATE_KEY;
+const infuraApiUrl = process.env.INFURA_API_URL;
+
 module.exports = {
   /**
    * Networks define how you connect to your ethereum client and let you set the
@@ -59,25 +62,20 @@ module.exports = {
 
   networks: {
     sepolia: {
-      provider: () =>
-        new HDWalletProvider(
-          MNEMONIC,
-          `wss://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`
-        ),
-      network_id: 11155111, // Sepolia network id
-      confirmations: 2,
-      timeoutBlocks: 200,
-      skipDryRun: true,
-      gas: 1000000,           // Gas limit
-      gasPrice: 10000000000,  // Gas price in wei
+      // providerOrUrl: `wss://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
+      provider: () => new HDWalletProvider(privateKey, infuraApiUrl),
+      network_id: 11155111,       // SEPOLIA NETWORK ID
+      gas: 5500000,               // GASS LIMIT
+      confirmations: 2,           // Number of confirmations to wait between deployments
+      timeoutBlocks: 200,         // Number of blocks before a deployment times out
+      skipDryRun: true            // Skip dry run before migrations
     },
-    // Other networks...
   },
 
   // Set default mocha options here, use special reporters, etc.
-  mocha: {
+  // mocha: {
     // timeout: 100000
-  },
+  // },
 
   // Configure your compilers
   compilers: {
