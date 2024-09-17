@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>shan dahanayaka</h1>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script>
+        async function connectWallet() {
+            if (window.ethereum) {
+                const web3 = new Web3(window.ethereum);
+                try {
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+                    // Get the user's account
+                    const accounts = await web3.eth.getAccounts();
+                    console.log('Connected account:', accounts[0]);
+
+                    // Get balance of the account
+                    const balance = await web3.eth.getBalance(accounts[0]);
+                    console.log('Balance:', web3.utils.fromWei(balance, 'ether'));
+                } catch (error) {
+                    console.error('User denied account access', error);
+                }
+            } else {
+                console.log('No Ethereum provider found. Install MetaMask.');
+            }
+        }
+
+        // Call the function to connect wallet
+        connectWallet();
+    </script>
+</body>
+
+</html>
