@@ -14,6 +14,10 @@
     <p id="walletStatus">Wallet not connected</p>
     <p id="tokenBalance">Token Balance: N/A</p>
 
+    <input type="text" name="from" id="from">
+    <input type="text" name="amount" id="amount">
+    <button id="sendWallet">Send</button>
+
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script>
         const tokenAddress = '0x68a629A18B480C0B6A57b3b62aE121568469Bba0';
@@ -61,18 +65,29 @@
             }
         }
 
-        async function transferTokens(recipient, amount) {
+        async function transferTokens() {
             try {
+                // Correctly retrieve the recipient address and amount from input fields
+                let recipient = document.getElementById('from').value; // .value to get the input value
+                let amount = document.getElementById('amount').value; // Correct 'amount' ID and use .value
+
+                // Convert amount to Wei
                 const amountInWei = web3.utils.toWei(amount, 'ether');
+
+                // Call transfer method of the contract
                 await contract.methods.transfer(recipient, amountInWei).send({ from: accounts[0] });
+
                 console.log('Tokens transferred');
             } catch (error) {
                 console.error('Error transferring tokens:', error);
             }
         }
 
+
+
         // Event listener for the "Connect Wallet" button
         document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
+        document.getElementById('sendWallet').addEventListener('click', transferTokens);
     </script>
 </body>
 
