@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERC20 Token Interaction</title>
+</head>
+
+<body>
+    <h1>Shan Dahanayaka's Token Interaction</h1>
+
+    <button id="connectWalletBtn">Connect Wallet</button>
+    <p id="walletStatus">Wallet not connected</p>
+    <p id="tokenBalance">Token Balance: N/A</p>
+
+    <input type="text" name="from" id="from">
+    <input type="text" name="amount" id="amount">
+    <button id="sendWallet">Send</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script>
+        const tokenAddress = '0x68a629A18B480C0B6A57b3b62aE121568469Bba0';
+        const tokenAbiUrl = './build/contracts/ERC20TestToken.json'; // ABI file location
+
+        let accounts;
+        let web3;
+        let contract;
+
+        async function connectWallet() {
+            if (window.ethereum) {
+                try {
+                    // Request accounts
+                    accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    web3 = new Web3(window.ethereum);
+
+                    // Fetch the contract ABI dynamically
+                    const response = await fetch(tokenAbiUrl);
+                    const tokenAbi = await response.json(); // Load the ABI
+
+                    // Create contract instance
+                    contract = new web3.eth.Contract(tokenAbi.abi, tokenAddress);
+
+                    // Update wallet connection status
+                    document.getElementById('walletStatus').innerText = `Wallet connected: ${accounts[0]}`;
+
+                    // Call function to get the balance
+                    getTokenBalance();
+                } catch (error) {
+                    console.error('Error connecting wallet:', error);
+                }
+            } else {
+                console.log('No Ethereum provider found. Install MetaMask.');
+                document.getElementById('walletStatus').innerText = 'No Ethereum provider found. Install MetaMask.';
+            }
+        }
+
+        async function getTokenBalance() {
+            try {
+                const balance = await contract.methods.balanceOf(accounts[0]).call();
+                const formattedBalance = web3.utils.fromWei(balance, 'ether');
+                document.getElementById('tokenBalance').innerText = `Token Balance: ${formattedBalance}`;
+            } catch (error) {
+                console.error('Error fetching token balance:', error);
+            }
+        }
+
+        async function transferTokens() {
+            try {
+                // Correctly retrieve the recipient address and amount from input fields
+                let recipient = document.getElementById('from').value; // .value to get the input value
+                let amount = document.getElementById('amount').value; // Correct 'amount' ID and use .value
+
+                // Convert amount to Wei
+                const amountInWei = web3.utils.toWei(amount, 'ether');
+
+                // Call transfer method of the contract
+                await contract.methods.transfer(recipient, amountInWei).send({ from: accounts[0] });
+
+                console.log('Tokens transferred');
+            } catch (error) {
+                console.error('Error transferring tokens:', error);
+            }
+        }
+
+
+
+        // Event listener for the "Connect Wallet" button
+        document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
+        document.getElementById('sendWallet').addEventListener('click', transferTokens);
+    </script>
+</body>
+
+</html>
