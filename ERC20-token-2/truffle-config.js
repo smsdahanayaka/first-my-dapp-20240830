@@ -65,7 +65,7 @@ module.exports = {
       // providerOrUrl: `wss://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
       provider: () => new HDWalletProvider(privateKey, infuraApiUrl),
       network_id: 11155111,       // SEPOLIA NETWORK ID
-      gas: 5500000,               // GASS LIMIT
+      gas: 3000000,               // GASS LIMIT
       confirmations: 2,           // Number of confirmations to wait between deployments
       timeoutBlocks: 200,         // Number of blocks before a deployment times out
       skipDryRun: true            // Skip dry run before migrations
